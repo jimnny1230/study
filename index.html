@@ -217,3 +217,2375 @@
     </script>
 </body>
 </html>
+<!-- ... existing code ... -->
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-rgb: 79, 70, 229;
+      --secondary: #0ea5e9;
+      --secondary-light: #e0f2fe;
+      --school-bg: #f1f5f9;
+      --school-border: #94a3b8;
+      --school-text: #475569;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 28px rgba(0,0,0,0.14);
+      --heat-0: #f1f5f9;
+      --heat-1: #e0e7ff;
+      --heat-2: #a5b4fc;
+      --heat-3: #6366f1;
+      --heat-4: #4338ca;
+      --heat-5: #312e81;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+    }
+
+    [data-theme="dark"] {
+      --bg-main: #0b1120;
+      --bg-card: #131c31;
+      --bg-subtle: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #64748b;
+      --border: #1e293b;
+      --school-bg: #1e293b;
+      --school-border: #475569;
+      --school-text: #cbd5e1;
+      --heat-0: #1e293b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.25s, color 0.25s;
+    }
+
+    /* 로그인 화면 */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 9000;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-main) 50%, var(--secondary-light) 100%);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .login-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 36px 28px; width: 100%; max-width: 420px;
+      box-shadow: var(--shadow-lg); text-align: center;
+    }
+    .login-logo {
+      width: 60px; height: 60px; border-radius: 18px;
+      background: var(--primary); color: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.35);
+    }
+    .login-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+    .login-desc { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 24px; }
+    .login-input-wrap { display: flex; gap: 8px; margin-bottom: 18px; }
+    .login-input {
+      flex: 1; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border);
+      background: var(--bg-subtle); color: var(--text-main); font-size: 0.95rem; outline: none;
+    }
+    .login-input:focus { border-color: var(--primary); background: var(--bg-card); }
+    .saved-accounts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+    .account-chip {
+      padding: 6px 12px; border-radius: 999px; background: var(--primary-light);
+      color: var(--primary); font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      border: 1px solid transparent; transition: 0.2s;
+    }
+    .account-chip:hover { border-color: var(--primary); transform: translateY(-1px); }
+
+    /* 공통 버튼 & 폼 */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px 15px; border-radius: 10px; font-size: 0.88rem; font-weight: 700;
+      border: 1px solid transparent; cursor: pointer; transition: 0.18s; white-space: nowrap;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: var(--secondary-light); color: var(--secondary); }
+    .btn-outline { background: var(--bg-card); border-color: var(--border); color: var(--text-main); }
+    .btn-outline:hover { background: var(--bg-subtle); }
+    .btn-ghost { background: transparent; color: var(--text-sub); padding: 7px 10px; }
+    .btn-ghost:hover { background: var(--bg-subtle); color: var(--text-main); }
+    .btn-danger { background: #fee2e2; color: #dc2626; }
+    .btn-sm { padding: 6px 10px; font-size: 0.8rem; border-radius: 8px; }
+    .btn-active-edit { background: #fef3c7 !important; color: #b45309 !important; border-color: #f59e0b !important; }
+
+    /* 상단 헤더 */
+    .app-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+    }
+    [data-theme="dark"] .app-header { background: rgba(19, 28, 49, 0.88); }
+    .header-inner {
+      max-width: 1440px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 10px; }
+    .brand-badge {
+      background: var(--primary); color: #fff; width: 34px; height: 34px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .date-nav {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg-subtle); padding: 4px 10px; border-radius: 12px;
+    }
+    .date-display { font-weight: 800; font-size: 0.95rem; min-width: 135px; text-align: center; cursor: pointer; }
+    .header-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+    /* 모듈형 대시보드 그리드 */
+    .dashboard-container {
+      max-width: 1440px; margin: 0 auto; padding: 20px 18px 80px;
+      position: relative;
+    }
+    .edit-mode-banner {
+      display: none; background: #fffbeb; border: 1.5px dashed #f59e0b; color: #92400e;
+      padding: 12px 16px; border-radius: 14px; margin-bottom: 16px;
+      align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      font-size: 0.88rem; font-weight: 600;
+    }
+    .edit-mode-banner.visible { display: flex; }
+
+    .widget-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .widget-card {
+      grid-column: span 6;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+    }
+    .widget-card.span-12 { grid-column: span 12; }
+    .widget-card.span-6 { grid-column: span 6; }
+    @media (max-width: 960px) {
+      .widget-card, .widget-card.span-6, .widget-card.span-12 { grid-column: span 12; }
+    }
+
+    /* 편집 모드 상태 스타일 */
+    .widget-grid.editing .widget-card {
+      border: 2px dashed var(--primary);
+      cursor: grab;
+    }
+    .widget-grid.editing .widget-card.dragging {
+      opacity: 0.45; transform: scale(0.98);
+    }
+    .widget-edit-bar {
+      display: none; align-items: center; justify-content: space-between;
+      background: var(--primary-light); color: var(--primary);
+      padding: 6px 10px; border-radius: 10px; margin-bottom: 12px;
+      font-size: 0.78rem; font-weight: 800;
+    }
+    .widget-grid.editing .widget-edit-bar { display: flex; }
+
+    .widget-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; gap: 8px; flex-wrap: wrap;
+    }
+    .widget-title {
+      font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 8px;
+    }
+    .widget-title-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--primary);
+    }
+
+    /* 요약 통계 카드 그리드 */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+    }
+    .stat-box {
+      background: var(--bg-subtle); border-radius: 14px; padding: 14px;
+      border-left: 4px solid var(--primary);
+    }
+    .stat-box.school { border-left-color: var(--school-border); }
+    .stat-box.secondary { border-left-color: var(--secondary); }
+    .stat-label { font-size: 0.78rem; color: var(--text-sub); font-weight: 700; margin-bottom: 4px; }
+    .stat-val { font-size: 1.35rem; font-weight: 800; color: var(--text-main); }
+    .stat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* 빠른 타이머 위젯 */
+    .quick-timer-box {
+      display: flex; flex-direction: column; gap: 12px;
+      background: linear-gradient(135deg, var(--primary-light), var(--bg-subtle));
+      padding: 16px; border-radius: 14px; border: 1px solid var(--border);
+    }
+    .qt-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .qt-select, .qt-input {
+      padding: 9px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text-main); font-size: 0.88rem;
+    }
+    .qt-input { flex: 1; min-width: 140px; }
+
+    /* 3파트 좌우 비교 타임테이블 */
+    .part-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .part-tab {
+      padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+      background: var(--bg-subtle); color: var(--text-sub); cursor: pointer; border: none;
+    }
+    .part-tab.active { background: var(--primary); color: #fff; }
+
+    .tt-compare-header {
+      display: grid; grid-template-columns: 56px 1fr 1fr; gap: 8px;
+      padding: 8px 4px; font-size: 0.82rem; font-weight: 800; text-align: center;
+      background: var(--bg-subtle); border-radius: 10px; margin-bottom: 8px;
+    }
+    .tt-part-section { margin-bottom: 16px; }
+    .tt-part-label {
+      font-size: 0.82rem; font-weight: 800; color: var(--primary);
+      background: var(--primary-light); padding: 5px 12px; border-radius: 8px;
+      margin-bottom: 6px; display: flex; justify-content: space-between;
+    }
+    .tt-grid {
+      display: grid; grid-template-columns: 56px 1fr 1fr; gap: 6px;
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      background: var(--bg-card);
+    }
+    .tt-time-col { background: var(--bg-subtle); border-right: 1px solid var(--border); }
+    .tt-hour-label {
+      height: 48px; display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 3px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .tt-lane { position: relative; border-right: 1px dashed var(--border); }
+    .tt-lane:last-child { border-right: none; }
+    .tt-slot {
+      height: 48px; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.15s;
+    }
+    .tt-slot:hover { background: var(--primary-light); opacity: 0.6; }
+
+    .tt-block {
+      position: absolute; left: 3px; right: 3px; border-radius: 7px;
+      padding: 3px 7px; font-size: 0.75rem; font-weight: 700;
+      overflow: hidden; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column; justify-content: center;
+      border-left: 4px solid rgba(0,0,0,0.25); z-index: 2;
+    }
+    .tt-block.is-school {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--school-bg),
+        var(--school-bg) 6px,
+        rgba(148, 163, 184, 0.22) 6px,
+        rgba(148, 163, 184, 0.22) 12px
+      ) !important;
+      color: var(--school-text) !important;
+      border-left: 4px solid var(--school-border) !important;
+      border: 1px solid var(--school-border);
+    }
+
+    /* 할 일 목록 */
+    .todo-input-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .todo-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
+    .todo-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 11px; border-radius: 10px; background: var(--bg-subtle); font-size: 0.86rem;
+    }
+    .todo-item.done span { text-decoration: line-through; color: var(--text-muted); }
+
+    /* 월간 공부 농도 히트맵 달력 */
+    .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;
+    }
+    .cal-day-head { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); padding-bottom: 4px; }
+    .cal-cell {
+      aspect-ratio: 1 / 0.92; border-radius: 9px; padding: 4px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 700; cursor: pointer;
+      background: var(--heat-0); border: 1.5px solid transparent; transition: 0.15s;
+    }
+    .cal-cell:hover { transform: scale(1.05); border-color: var(--primary); }
+    .cal-cell.selected { border-color: var(--text-main); box-shadow: 0 0 0 2px var(--primary-light); }
+    .cal-cell.heat-1 { background: var(--heat-1); color: #1e293b; }
+    .cal-cell.heat-2 { background: var(--heat-2); color: #0f172a; }
+    .cal-cell.heat-3 { background: var(--heat-3); color: #ffffff; }
+    .cal-cell.heat-4 { background: var(--heat-4); color: #ffffff; }
+    .cal-cell.heat-5 { background: var(--heat-5); color: #ffffff; }
+    .cal-hrs { font-size: 0.65rem; opacity: 0.9; margin-top: 1px; }
+
+    /* 주간 누적 그래프 */
+    .week-chart {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;
+      height: 170px; align-items: end; padding-top: 20px;
+    }
+    .week-bar-col {
+      display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 5px;
+    }
+    .week-bar-stack {
+      width: 100%; max-width: 34px; border-radius: 8px 8px 4px 4px; overflow: hidden;
+      display: flex; flex-direction: column-reverse; background: var(--bg-subtle);
+    }
+    .bar-study { background: var(--primary); transition: height 0.35s; }
+    .bar-school {
+      background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 4px, #cbd5e1 4px, #cbd5e1 8px);
+      transition: height 0.35s;
+    }
+    .week-day-lbl { font-size: 0.75rem; font-weight: 700; color: var(--text-sub); }
+    .week-val-lbl { font-size: 0.68rem; font-weight: 700; color: var(--primary); }
+
+    /* 회고 메모장 */
+    .reflection-area {
+      width: 100%; min-height: 105px; padding: 11px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--bg-subtle); color: var(--text-main);
+      font-size: 0.88rem; resize: vertical; outline: none; margin-top: 8px;
+    }
+    .reflection-area:focus { border-color: var(--primary); background: var(--bg-card); }
+    .star-row { display: flex; gap: 5px; font-size: 1.3rem; cursor: pointer; }
+    .star-btn { color: var(--text-muted); transition: 0.15s; }
+    .star-btn.active { color: #f59e0b; transform: scale(1.1); }
+
+    /* ========================================================================
+       4. 플래너 꾸미기 스티커 레이어 & 컨트롤 핸들
+       ======================================================================== */
+    #stickerLayer {
+      position: absolute; inset: 0; pointer-events: none; z-index: 45; overflow: hidden;
+    }
+    #stickerLayer.hidden-layer { display: none; }
+    .placed-sticker {
+      position: absolute; pointer-events: auto; cursor: move;
+      user-select: none; touch-action: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      transform-origin: center center;
+      transition: filter 0.15s;
+    }
+    .placed-sticker:hover { filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18)); }
+    .placed-sticker.selected {
+      outline: 2px dashed var(--primary);
+      outline-offset: 4px;
+      border-radius: 8px;
+      z-index: 60;
+    }
+    .placed-sticker img, .placed-sticker svg {
+      width: 100%; height: 100%; object-fit: contain; pointer-events: none; display: block;
+    }
+    .sticker-toolbar {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 500; background: var(--bg-card); border: 1.5px solid var(--primary);
+      box-shadow: var(--shadow-lg); border-radius: 999px;
+      padding: 8px 16px; display: none; align-items: center; gap: 10px;
+    }
+    .sticker-toolbar.visible { display: flex; }
+
+    /* ========================================================================
+       1. 감성 풀스크린 집중 타이머 (사진 & 동영상 배경 지원)
+       ======================================================================== */
+    #focusOverlay {
+      position: fixed; inset: 0; z-index: 8000;
+      display: none; flex-direction: column; justify-content: space-between;
+      padding: 24px; color: #ffffff; overflow: hidden;
+      background: #0f172a;
+    }
+    #focusOverlay.active { display: flex; }
+
+    /* 기본 5종 테마 클래스 */
+    .f-theme-aurora { background: linear-gradient(135deg, #0f172a 0%, #312e81 45%, #0d9488 100%) !important; }
+    .f-theme-candle { background: radial-gradient(circle at center, #7c2d12 0%, #431407 55%, #1c0a00 100%) !important; }
+    .f-theme-midnight { background: linear-gradient(180deg, #020617 0%, #1e1b4b 100%) !important; }
+    .f-theme-forest { background: linear-gradient(135deg, #064e3b 0%, #022c22 60%, #0f172a 100%) !important; }
+    .f-theme-minimal { background: #f8fafc !important; color: #0f172a !important; }
+
+    /* 커스텀 사진/동영상 미디어 배경 */
+    #focusBgImage, #focusBgVideo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; display: none;
+    }
+    #focusMediaDimmer {
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(0px);
+      pointer-events: none;
+    }
+    .focus-content-layer {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; justify-content: space-between;
+      height: 100%; max-width: 900px; width: 100%; margin: 0 auto;
+    }
+    .focus-top-bar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;
+    }
+    .focus-center {
+      text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .focus-ring {
+      width: 260px; height: 260px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.35);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
+      box-shadow: 0 0 40px rgba(0,0,0,0.25);
+      animation: breathe 5s ease-in-out infinite;
+    }
+    .f-theme-minimal .focus-ring {
+      border-color: var(--primary); background: rgba(255,255,255,0.85);
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .focus-digits { font-size: 3.1rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+    .focus-time-edit-box {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center;
+      background: rgba(0,0,0,0.35); padding: 10px 18px; border-radius: 14px;
+      backdrop-filter: blur(8px); font-size: 0.85rem;
+    }
+    .f-theme-minimal .focus-time-edit-box { background: rgba(0,0,0,0.06); }
+    .focus-time-edit-box input[type="time"] {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3);
+      color: inherit; padding: 4px 8px; border-radius: 6px; font-weight: 700;
+    }
+    .focus-media-controls {
+      display: none; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.45); padding: 8px 16px; border-radius: 12px; font-size: 0.8rem;
+    }
+    .focus-media-controls.visible { display: flex; }
+
+    /* 모달 시스템 */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 8500;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 24px; width: 100%; max-width: 480px;
+      max-height: 88vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+    }
+    .modal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--bg-subtle); color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    /* 컬러 팔레트 미리보기 칩 */
+    .palette-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .preset-dot {
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+      border: 2.5px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: 0.15s;
+    }
+    .preset-dot:hover { transform: scale(1.15); }
+    .harmony-preview {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px;
+    }
+    .harmony-swatch {
+      height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 800;
+    }
+
+    /* 스티커 갤러리 그리드 */
+    .sticker-gallery {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px;
+    }
+    .sticker-pick-btn {
+      aspect-ratio: 1; border-radius: 12px; border: 1.5px solid var(--border);
+      background: var(--bg-subtle); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px; padding: 8px;
+      cursor: pointer; transition: 0.15s;
+    }
+    .sticker-pick-btn:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+
+    /* 토스트 메시지 */
+    #toastBox {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+    }
+    .toast-item {
+      background: #0f172a; color: #fff; padding: 11px 16px; border-radius: 12px;
+      font-size: 0.85rem; font-weight: 700; box-shadow: var(--shadow-lg);
+      animation: fadeSlideUp 0.25s ease;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 토스트 알림 컨테이너 -->
+<div id="toastBox"></div>
+
+<!-- ==========================================================================
+     0. 닉네임 간편 로그인 화면
+     ========================================================================== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div class="login-title">모멘텀 커스텀 스터디 플래너</div>
+    <div class="login-desc">인터넷 없이 브라우저에 안전하게 저장됩니다.<br>닉네임을 입력하면 나만의 커스텀 플래너로 입장합니다.</div>
+    <div class="login-input-wrap">
+      <input type="text" id="loginNicknameInput" class="login-input" placeholder="닉네임 입력 (예: 지민, 수험생A)" maxlength="20" onkeydown="if(event.key==='Enter') handleLogin()">
+      <button class="btn btn-primary" onclick="handleLogin()">입장하기</button>
+    </div>
+    <div id="savedAccountsArea" style="display:none;">
+      <div style="font-size:0.78rem;color:var(--text-muted);font-weight:700;">최근 접속한 닉네임</div>
+      <div class="saved-accounts" id="savedAccountsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     1. 상단 고정 내비게이션 & 커스터마이징 툴바
+     ========================================================================== -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand-group">
+      <div class="brand-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div style="font-weight:800;font-size:0.98rem;display:flex;align-items:center;gap:6px;">
+          <span id="headerUserTitle">학습자</span>님의 플래너
+          <span id="ddayBadge" onclick="openDdayModal()" style="font-size:0.72rem;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:999px;cursor:pointer;">D-Day 설정</span>
+        </div>
+        <div style="font-size:0.73rem;color:var(--text-muted);">완전 오프라인 로컬 저장소 작동 중</div>
+      </div>
+    </div>
+
+    <!-- 날짜 이동기 -->
+    <div class="date-nav">
+      <button class="btn btn-ghost btn-sm" onclick="shiftDate(-1)">◀</button>
+      <div class="date-display" id="currentDateText" onclick="document.getElementById('nativeDatePicker').showPicker?.() || document.getElementById('nativeDatePicker').click()">2026-11-16</div>
+      <input type="date" id="nativeDatePicker" style="position:absolute;opacity:0;pointer-events:none;" onchange="jumpToDate(this.value)">
+      <button class="btn btn-ghost btn-sm" onclick="shiftDate(1)">▶</button>
+      <button class="btn btn-outline btn-sm" onclick="goToday()">오늘</button>
+    </div>
+
+    <!-- 커스터마이징 & 계정 툴바 -->
+    <div class="header-tools">
+      <button class="btn btn-outline btn-sm" id="btnToggleEditMode" onclick="toggleDashboardEditMode()">🧩 화면 배치 편집</button>
+      <button class="btn btn-outline btn-sm" onclick="openModal('widgetManagerModal')">➕ 기능 위젯 관리</button>
+      <button class="btn btn-outline btn-sm" onclick="openModal('themePaletteModal')">🎨 컨셉 컬러</button>
+      <button class="btn btn-outline btn-sm" onclick="openModal('stickerModal')">✨ 스티커 꾸미기</button>
+      <button class="btn btn-ghost btn-sm" id="btnToggleStickerLayer" onclick="toggleStickerVisibility()" title="스티커 보이기/숨기기">👁️</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleDarkMode()" title="다크/라이트 모드">🌓</button>
+      <button class="btn btn-ghost btn-sm" onclick="openModal('backupModal')" title="백업/복원">💾</button>
+      <button class="btn btn-secondary btn-sm" onclick="logoutUser()">계정 전환</button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================================================
+     2. 메인 대시보드 영역 (모듈형 위젯 그리드 + 스티커 자유 배치 레이어)
+     ========================================================================== -->
+<main class="dashboard-container" id="dashboardCanvas">
+  <!-- 자유 배치 스티커 레이어 -->
+  <div id="stickerLayer"></div>
+
+  <!-- 편집 모드 안내 배너 -->
+  <div class="edit-mode-banner" id="editModeBanner">
+    <div>🧩 <strong>화면 배치 편집 모드 활성화됨:</strong> 위젯 카드를 드래그하여 순서를 바꾸거나, 카드 상단의 [너비 전환]·[숨김] 버튼으로 메인 화면을 자유롭게 구성하세요.</div>
+    <button class="btn btn-primary btn-sm" onclick="toggleDashboardEditMode()">편집 완료</button>
+  </div>
+
+  <!-- 모듈형 위젯 그리드 -->
+  <div class="widget-grid" id="widgetGrid">
+
+    <!-- 위젯 1: 오늘의 요약 통계 -->
+    <section class="widget-card span-12" data-widget-id="summary">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | 📊 오늘의 요약 통계</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('summary')">너비 전환 (1열/전체)</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('summary')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>오늘의 학습 요약 & 학교 시간 분리 집계</div>
+        <button class="btn btn-outline btn-sm" onclick="openModal('subjectModal')">📚 과목 관리</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-label">개인 순공 시간 (실제)</div>
+          <div class="stat-val" id="statActualStudy">0시간 0분</div>
+          <div class="stat-sub" id="statPlanStudySub">계획 0시간 0분 대비 0%</div>
+        </div>
+        <div class="stat-box school">
+          <div class="stat-label">학교 / 수업 시간 (분리)</div>
+          <div class="stat-val" id="statActualSchool">0시간 0분</div>
+          <div class="stat-sub">순공 시간과 별도 집계됨</div>
+        </div>
+        <div class="stat-box secondary">
+          <div class="stat-label">할 일 완료율</div>
+          <div class="stat-val" id="statTodoRate">0%</div>
+          <div class="stat-sub" id="statTodoCountSub">0 / 0 완료</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">총 집중 기록 블록</div>
+          <div class="stat-val" id="statBlockCount">0개</div>
+          <div class="stat-sub">계획 및 실제 타임블록</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 위젯 2: 빠른 집중 타이머 런처 & 할 일 목록 -->
+    <section class="widget-card span-6" data-widget-id="timerTodo">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | ⏱️ 집중 타이머 & 할 일</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('timerTodo')">너비 전환</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('timerTodo')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>감성 집중 타이머 & 오늘의 할 일</div>
+        <button class="btn btn-outline btn-sm" onclick="openFocusBgModal()">🖼️ 타이머 배경 설정</button>
+      </div>
+
+      <!-- 빠른 타이머 시작기 -->
+      <div class="quick-timer-box">
+        <div class="qt-row">
+          <select id="qtCategory" class="qt-select" onchange="toggleQtSubject()">
+            <option value="study">📚 개인 공부</option>
+            <option value="school">🏫 학교/수업</option>
+          </select>
+          <select id="qtSubject" class="qt-select"></select>
+          <input type="text" id="qtTaskTitle" class="qt-input" placeholder="공부할 내용 입력 (예: 미적분 기출)">
+        </div>
+        <div class="qt-row" style="justify-content:space-between;align-items:center;">
+          <select id="qtMode" class="qt-select">
+            <option value="stopwatch">⏱️ 스톱워치 모드</option>
+            <option value="pomo25">🍅 뽀모도로 25분</option>
+            <option value="pomo50">🔥 딥워크 50분</option>
+          </select>
+          <button class="btn btn-primary" onclick="launchFocusTimer()">▶ 집중 타이머 시작</button>
+        </div>
+      </div>
+
+      <!-- 할 일 목록 -->
+      <div style="margin-top:16px;">
+        <div style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:var(--text-sub);">✅ 오늘의 할 일 체크리스트</div>
+        <div class="todo-input-row">
+          <select id="todoSubSelect" class="qt-select" style="padding:7px 8px;"></select>
+          <input type="text" id="newTodoInput" class="qt-input" placeholder="할 일 추가..." onkeydown="if(event.key==='Enter') addTodoItem()">
+          <button class="btn btn-primary btn-sm" onclick="addTodoItem()">추가</button>
+        </div>
+        <div class="todo-list" id="todoListBox"></div>
+      </div>
+    </section>
+
+    <!-- 위젯 3: 아침/점심/저녁 3파트 & 계획 vs 실제 좌우 비교 타임테이블 -->
+    <section class="widget-card span-6" data-widget-id="timetable">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | 📅 계획 vs 실제 비교 타임테이블</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('timetable')">너비 전환</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('timetable')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>3파트 계획 vs 실제 비교 타임테이블</div>
+        <div class="part-tabs">
+          <button class="part-tab active" data-part="all" onclick="setTimetablePart('all')">전체</button>
+          <button class="part-tab" data-part="morning" onclick="setTimetablePart('morning')">🌅 아침</button>
+          <button class="part-tab" data-part="afternoon" onclick="setTimetablePart('afternoon')">☀️ 점심</button>
+          <button class="part-tab" data-part="evening" onclick="setTimetablePart('evening')">🌙 저녁</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.76rem;color:var(--text-sub);">
+        <span>빈 시간 칸을 클릭하면 일정을 바로 추가할 수 있습니다.</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="openScheduleModal('plan', '09:00')">+ 계획</button>
+          <button class="btn btn-primary btn-sm" onclick="openScheduleModal('actual', '09:00')">+ 실제</button>
+        </div>
+      </div>
+
+      <div class="tt-compare-header">
+        <div>시간</div>
+        <div style="color:var(--primary);">📋 계획 (Plan)</div>
+        <div style="color:var(--secondary);">⚡ 실제 실행 (Actual)</div>
+      </div>
+      <div id="timetableContainer"></div>
+    </section>
+
+    <!-- 위젯 4: 월간 공부 농도 5단계 히트맵 달력 -->
+    <section class="widget-card span-6" data-widget-id="heatmap">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | 🟩 공부 농도 히트맵 달력</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('heatmap')">너비 전환</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('heatmap')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>월간 공부 농도 달력 (시간이 길수록 진해짐)</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="shiftCalMonth(-1)">◀</button>
+          <span id="calMonthLabel" style="font-weight:800;font-size:0.88rem;">2026년 11월</span>
+          <button class="btn btn-ghost btn-sm" onclick="shiftCalMonth(1)">▶</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;">
+        <span>적음</span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-0);display:inline-block;"></span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-1);display:inline-block;"></span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-2);display:inline-block;"></span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-3);display:inline-block;"></span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-4);display:inline-block;"></span>
+        <span style="width:12px;height:12px;border-radius:3px;background:var(--heat-5);display:inline-block;"></span>
+        <span>8h+</span>
+      </div>
+      <div class="cal-grid" id="heatmapCalendarGrid"></div>
+    </section>
+
+    <!-- 위젯 5: 1주일 누적 학습 그래프 -->
+    <section class="widget-card span-6" data-widget-id="weekly">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | 📈 1주일 누적 학습 그래프</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('weekly')">너비 전환</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('weekly')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>주간 학습 시간 모아보기 (월~일)</div>
+        <span id="weeklyTotalBadge" style="font-size:0.78rem;font-weight:800;color:var(--primary);background:var(--primary-light);padding:4px 10px;border-radius:999px;">주간 순공 0시간</span>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-sub);margin-bottom:6px;">
+        ■ 컬러 막대: 개인 순공 시간 &nbsp;|&nbsp; ▨ 빗금 막대: 학교/수업 시간
+      </div>
+      <div class="week-chart" id="weeklyBarChart"></div>
+    </section>
+
+    <!-- 위젯 6: 오늘의 회고 & 만족도 별점 -->
+    <section class="widget-card span-6" data-widget-id="reflection">
+      <div class="widget-edit-bar">
+        <span>⠿ 드래그하여 이동 | 📝 오늘의 회고 & 별점</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" onclick="toggleWidgetSpan('reflection')">너비 전환</button>
+          <button class="btn btn-danger btn-sm" onclick="hideWidget('reflection')">숨김</button>
+        </div>
+      </div>
+      <div class="widget-header">
+        <div class="widget-title"><span class="widget-title-dot"></span>오늘의 1일 기록 & 학습 회고</div>
+        <div class="star-row" id="dailyStarRow">
+          <span class="star-btn" onclick="setDayRating(1)">★</span>
+          <span class="star-btn" onclick="setDayRating(2)">★</span>
+          <span class="star-btn" onclick="setDayRating(3)">★</span>
+          <span class="star-btn" onclick="setDayRating(4)">★</span>
+          <span class="star-btn" onclick="setDayRating(5)">★</span>
+        </div>
+      </div>
+      <div id="subjectSummaryPills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;"></div>
+      <textarea id="dailyMemoTextarea" class="reflection-area" placeholder="오늘 공부하면서 잘된 점, 부족했던 점, 내일 다짐을 자유롭게 적어보세요..." oninput="saveDayMemo(this.value)"></textarea>
+    </section>
+
+  </div>
+</main>
+
+<!-- 선택된 스티커 플로팅 편집 툴바 -->
+<div class="sticker-toolbar" id="stickerToolbar">
+  <span style="font-size:0.8rem;font-weight:800;color:var(--primary);">✨ 스티커 편집</span>
+  <button class="btn btn-outline btn-sm" onclick="adjustSelectedSticker('scale', -0.15)">➖ 축소</button>
+  <button class="btn btn-outline btn-sm" onclick="adjustSelectedSticker('scale', 0.15)">➕ 확대</button>
+  <button class="btn btn-outline btn-sm" onclick="adjustSelectedSticker('rotate', -15)">↺ 회전</button>
+  <button class="btn btn-outline btn-sm" onclick="adjustSelectedSticker('rotate', 15)">↻ 회전</button>
+  <button class="btn btn-danger btn-sm" onclick="deleteSelectedSticker()">🗑️ 삭제</button>
+  <button class="btn btn-ghost btn-sm" onclick="deselectSticker()">완료</button>
+</div>
+
+<!-- ==========================================================================
+     3. 풀스크린 감성 집중 타이머 오버레이 (사진 & 동영상 배경 지원)
+     ========================================================================== -->
+<div id="focusOverlay" class="f-theme-aurora">
+  <img id="focusBgImage" alt="집중 타이머 배경 사진">
+  <video id="focusBgVideo" autoplay loop muted playsinline></video>
+  <div id="focusMediaDimmer"></div>
+
+  <div class="focus-content-layer">
+    <div class="focus-top-bar">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.18);color:inherit;" onclick="setFocusPresetTheme('aurora')">🌌 오로라</button>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.18);color:inherit;" onclick="setFocusPresetTheme('candle')">🕯️ 벽난로</button>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.18);color:inherit;" onclick="setFocusPresetTheme('midnight')">🌙 미드나잇</button>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.18);color:inherit;" onclick="setFocusPresetTheme('forest')">🌲 숲속</button>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.18);color:inherit;" onclick="setFocusPresetTheme('minimal')">🤍 미니멀</button>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-primary btn-sm" onclick="openFocusBgModal()">🖼️ 내 사진/동영상 배경</button>
+      </div>
+    </div>
+
+    <div class="focus-center">
+      <div id="focusQuoteText" onclick="editFocusQuoteInline()" style="font-size:1.05rem;font-weight:700;opacity:0.9;cursor:pointer;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.12);" title="클릭하여 응원 문구 수정">
+        "지금의 몰입이 내일의 나를 만든다."
+      </div>
+
+      <div class="focus-ring">
+        <div id="focusSubjectBadge" style="font-size:0.85rem;font-weight:800;padding:3px 12px;border-radius:999px;background:var(--primary);color:#fff;margin-bottom:6px;">수학</div>
+        <div class="focus-digits" id="focusTimerDigits">00:00:00</div>
+        <div id="focusTaskSubtitle" style="font-size:0.85rem;opacity:0.85;margin-top:4px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">집중 학습 중</div>
+      </div>
+
+      <!-- 시작 / 종료 시각 실시간 수정 박스 -->
+      <div class="focus-time-edit-box">
+        <label>시작 시각: <input type="time" id="focusStartInput" onchange="recalcFocusTimes()"></label>
+        <label>종료(정지) 시각: <input type="time" id="focusEndInput" onchange="recalcFocusTimes()"></label>
+        <span id="focusDurationPreview" style="font-weight:800;">측정: 0분</span>
+      </div>
+
+      <!-- 미디어 배경 오버레이 어둡기/블러 실시간 조절 바 -->
+      <div class="focus-media-controls" id="focusMediaControls">
+        <label>배경 어둡기: <input type="range" id="focusDimRange" min="0" max="85" value="45" oninput="updateFocusMediaStyle()"></label>
+        <label>배경 블러: <input type="range" id="focusBlurRange" min="0" max="16" value="0" oninput="updateFocusMediaStyle()"></label>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;">
+        <button class="btn btn-outline" id="btnFocusPause" onclick="toggleFocusPause()" style="min-width:110px;">⏸ 일시정지</button>
+        <button class="btn btn-primary" onclick="finishFocusTimer()" style="min-width:160px;">✅ 완료 및 타임테이블 기록</button>
+        <button class="btn btn-danger" onclick="cancelFocusTimer()">취소</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:0.78rem;opacity:0.75;">
+      시작/정지 시각을 직접 수정하면 타임테이블의 실제 실행 칸에 정확한 시간대로 기록됩니다.
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     4. 각종 설정 및 커스터마이징 모달들
+     ========================================================================== -->
+
+<!-- 모달 A: 집중 타이머 배경 사진/동영상 업로드 설정 -->
+<div class="modal-backdrop" id="focusBgModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">🖼️ 집중 타이머 배경 사진 & 동영상 설정</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('focusBgModal')">✕</button>
+    </div>
+    <p style="font-size:0.84rem;color:var(--text-sub);margin-bottom:14px;">
+      내 기기의 <strong>사진(JPG, PNG, GIF, WebP)</strong> 또는 <strong>동영상(MP4, WebM)</strong>을 업로드하면 오프라인에서도 브라우저(IndexedDB)에 영구 저장되어 타이머 배경으로 재생됩니다.
+    </p>
+    <div class="form-group">
+      <label class="form-label">내 기기에서 배경 파일 선택</label>
+      <input type="file" id="focusMediaFileInput" class="form-control" accept="image/*,video/mp4,video/webm" onchange="handleFocusMediaUpload(event)">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:space-between;margin-top:16px;">
+      <button class="btn btn-danger btn-sm" onclick="clearCustomFocusMedia()">업로드 배경 초기화 (기본 테마 사용)</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('focusBgModal')">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 B: 메인 화면 기능 위젯 추가/숨김 관리자 -->
+<div class="modal-backdrop" id="widgetManagerModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">🧩 메인 화면 기능 위젯 관리</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('widgetManagerModal')">✕</button>
+    </div>
+    <p style="font-size:0.83rem;color:var(--text-sub);margin-bottom:14px;">
+      메인 화면에 표시할 기능 카드를 자유롭게 켜거나 끄고, 레이아웃을 초기화할 수 있습니다.
+    </p>
+    <div id="widgetToggleList" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <div style="margin-top:18px;display:flex;justify-content:space-between;">
+      <button class="btn btn-outline btn-sm" onclick="resetDashboardLayout()">기본 배치로 초기화</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('widgetManagerModal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 C: 컨셉 색상 & 자동 조화 팔레트 생성기 -->
+<div class="modal-backdrop" id="themePaletteModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">🎨 컨셉 컬러 & 조화 팔레트 생성기</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('themePaletteModal')">✕</button>
+    </div>
+    <p style="font-size:0.83rem;color:var(--text-sub);margin-bottom:12px;">
+      메인 컨셉 색상을 선택하면 색채학(HSL 색상환) 알고리즘이 <strong>어울리는 보조색, 파스텔 배경, 5단계 공부 농도 그라데이션</strong>을 자동으로 구성합니다.
+    </p>
+    <div class="form-group">
+      <label class="form-label">직접 메인 색상 선택 (Color Picker)</label>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <input type="color" id="conceptColorPicker" value="#4f46e5" style="width:54px;height:42px;border:none;border-radius:10px;cursor:pointer;" oninput="applyConceptColor(this.value)">
+        <span id="conceptColorHex" style="font-weight:800;font-size:0.95rem;">#4F46E5</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">감성 추천 컨셉 프리셋</label>
+      <div class="palette-presets">
+        <div class="preset-dot" style="background:#4f46e5;" title="인디고 포커스" onclick="applyConceptColor('#4f46e5')"></div>
+        <div class="preset-dot" style="background:#e11d48;" title="로즈 블라썸" onclick="applyConceptColor('#e11d48')"></div>
+        <div class="preset-dot" style="background:#0d9488;" title="민트 포레스트" onclick="applyConceptColor('#0d9488')"></div>
+        <div class="preset-dot" style="background:#d97706;" title="웜 앰버 라떼" onclick="applyConceptColor('#d97706')"></div>
+        <div class="preset-dot" style="background:#7c3aed;" title="라벤더 드림" onclick="applyConceptColor('#7c3aed')"></div>
+        <div class="preset-dot" style="background:#0284c7;" title="오션 브리즈" onclick="applyConceptColor('#0284c7')"></div>
+        <div class="preset-dot" style="background:#475569;" title="모던 슬레이트" onclick="applyConceptColor('#475569')"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">자동 생성된 조화 컬러 팔레트 미리보기</label>
+      <div class="harmony-preview" id="harmonyPreviewBox"></div>
+    </div>
+    <div style="text-align:right;margin-top:14px;">
+      <button class="btn btn-primary btn-sm" onclick="closeModal('themePaletteModal')">적용 완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 D: 플래너 꾸미기 스티커 팩 & 내 이미지 스티커 업로드 -->
+<div class="modal-backdrop" id="stickerModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">✨ 플래너 꾸미기 스티커</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('stickerModal')">✕</button>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-sub);margin-bottom:12px;">
+      스티커를 클릭하면 메인 화면에 추가됩니다. 추가된 스티커는 <strong>드래그로 자유 이동, 크기 조절, 회전</strong>이 가능합니다.
+    </p>
+    <div class="form-group">
+      <label class="form-label">📸 내 이미지 파일로 커스텀 스티커 만들기 (PNG, GIF, JPG)</label>
+      <input type="file" id="customStickerInput" class="form-control" accept="image/*" onchange="handleCustomStickerUpload(event)">
+    </div>
+    <div class="form-label">🎨 기본 감성 데코 스티커 팩</div>
+    <div class="sticker-gallery" id="builtinStickerGallery"></div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between;">
+      <button class="btn btn-danger btn-sm" onclick="clearAllPlacedStickers()">배치된 스티커 모두 지우기</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('stickerModal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 E: 일정 추가/수정 모달 -->
+<div class="modal-backdrop" id="scheduleModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;" id="schedModalTitle">일정 추가</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('scheduleModal')">✕</button>
+    </div>
+    <input type="hidden" id="schedEditId">
+    <div class="form-group">
+      <label class="form-label">기록 구분</label>
+      <select id="schedTrack" class="form-control">
+        <option value="plan">📋 계획 (Plan)</option>
+        <option value="actual">⚡ 실제 실행 (Actual)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">활동 유형 (학교 시간 분리 집계)</label>
+      <select id="schedCategory" class="form-control" onchange="document.getElementById('schedSubGroup').style.display = this.value==='study'?'block':'none'">
+        <option value="study">📚 개인 공부</option>
+        <option value="school">🏫 학교 / 수업 시간</option>
+      </select>
+    </div>
+    <div class="form-group" id="schedSubGroup">
+      <label class="form-label">과목 선택</label>
+      <select id="schedSubject" class="form-control"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">일정 내용</label>
+      <input type="text" id="schedTitle" class="form-control" placeholder="예: 영어 독해 3지문, 학교 정규수업">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group">
+        <label class="form-label">시작 시각</label>
+        <input type="time" id="schedStart" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">종료 시각</label>
+        <input type="time" id="schedEnd" class="form-control">
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:14px;">
+      <button class="btn btn-danger btn-sm" id="btnDeleteSched" style="display:none;" onclick="deleteScheduleItem()">삭제</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-outline btn-sm" onclick="closeModal('scheduleModal')">취소</button>
+        <button class="btn btn-primary btn-sm" onclick="saveScheduleItem()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 F: 과목 관리 & D-Day & 백업 모달 -->
+<div class="modal-backdrop" id="subjectModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">📚 과목 추가 및 색상 설정</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('subjectModal')">✕</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="text" id="newSubName" class="form-control" placeholder="새 과목명">
+      <input type="color" id="newSubColor" value="#6366f1" style="width:46px;height:40px;border:none;border-radius:8px;">
+      <button class="btn btn-primary btn-sm" onclick="addSubject()">추가</button>
+    </div>
+    <div id="subjectManageList" style="display:flex;flex-direction:column;gap:6px;"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="ddayModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">🎯 목표 D-Day 설정</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('ddayModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">목표 이름</label>
+      <input type="text" id="ddayTitleInput" class="form-control" placeholder="예: 2027 수능, 기말고사">
+    </div>
+    <div class="form-group">
+      <label class="form-label">목표 날짜</label>
+      <input type="date" id="ddayDateInput" class="form-control">
+    </div>
+    <div style="text-align:right;">
+      <button class="btn btn-primary btn-sm" onclick="saveDday()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="backupModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="font-weight:800;">💾 데이터 백업 및 복원</h3>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('backupModal')">✕</button>
+    </div>
+    <p style="font-size:0.83rem;color:var(--text-sub);margin-bottom:14px;">현재 계정의 모든 계획, 기록, 색상 테마, 위젯 배치 및 스티커 데이터를 JSON 파일로 저장하거나 불러옵니다.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-primary" onclick="exportBackupJson()">⬇️ JSON 파일로 내보내기</button>
+      <label class="btn btn-outline" style="cursor:pointer;">
+        ⬆️ JSON 백업 파일 불러오기
+        <input type="file" accept=".json" style="display:none;" onchange="importBackupJson(event)">
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   1. IndexedDB 오프라인 대용량 미디어(타이머 배경 사진·동영상) 저장소
+   ============================================================================ */
+const MediaDB = {
+  dbName: "MomentumPlannerMediaDB",
+  storeName: "mediaStore",
+  open() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(this.dbName, 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.storeName)) {
+          db.createObjectStore(this.storeName);
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async saveMedia(key, blob, mimeType) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.storeName, "readwrite");
+      tx.objectStore(this.storeName).put({ blob, mimeType }, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async getMedia(key) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.storeName, "readonly");
+      const req = tx.objectStore(this.storeName).get(key);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async deleteMedia(key) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.storeName, "readwrite");
+      tx.objectStore(this.storeName).delete(key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+};
+
+/* ============================================================================
+   2. 전역 상태 및 기본 데이터 정의
+   ============================================================================ */
+let currentUser = "";
+let userData = null;
+let selectedDate = new Date().toISOString().slice(0, 10);
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let currentPartFilter = "all";
+let isEditMode = false;
+let selectedStickerId = null;
+let activeMediaObjectURL = null;
+
+// 타이머 런타임 상태
+let timerInterval = null;
+let timerSeconds = 0;
+let timerTargetSeconds = 0;
+let timerPaused = false;
+let timerContext = { category: "study", subjectId: "math", title: "" };
+
+const DEFAULT_WIDGETS = [
+  { id: "summary", name: "📊 오늘의 요약 통계", visible: true, span: 12 },
+  { id: "timerTodo", name: "⏱️ 감성 집중 타이머 & 할 일", visible: true, span: 6 },
+  { id: "timetable", name: "📅 3파트 계획 vs 실제 타임테이블", visible: true, span: 6 },
+  { id: "heatmap", name: "🟩 월간 공부 농도 히트맵 달력", visible: true, span: 6 },
+  { id: "weekly", name: "📈 주간 누적 학습 그래프", visible: true, span: 6 },
+  { id: "reflection", name: "📝 오늘의 1일 기록 & 회고", visible: true, span: 6 }
+];
+
+const BUILTIN_STICKERS = [
+  { id: "st_star", label: "반짝 별", svg: `<svg viewBox="0 0 64 64"><polygon points="32,4 40,22 60,24 45,38 49,58 32,48 15,58 19,38 4,24 24,22" fill="#facc15" stroke="#eab308" stroke-width="3"/></svg>` },
+  { id: "st_heart", label: "응원 하트", svg: `<svg viewBox="0 0 64 64"><path d="M32 56C32 56 8 40 8 22C8 13 15 7 23 7C28 7 31 10 32 13C33 10 36 7 41 7C49 7 56 13 56 22C56 40 32 56 32 56Z" fill="#fb7185" stroke="#e11d48" stroke-width="3"/></svg>` },
+  { id: "st_coffee", label: "카페인 충전", svg: `<svg viewBox="0 0 64 64"><rect x="14" y="22" width="30" height="30" rx="6" fill="#d97706"/><path d="M44 28h6a6 6 0 0 1 0 12h-6" fill="none" stroke="#92400e" stroke-width="4"/><path d="M22 14c0-4 4-4 4-8M32 14c0-4 4-4 4-8" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/></svg>` },
+  { id: "st_check", label: "참 잘했어요", svg: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#10b981"/><polyline points="20 33 28 41 45 23" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
+  { id: "st_book", label: "열공 책", svg: `<svg viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="44" rx="5" fill="#6366f1"/><rect x="18" y="10" width="6" height="44" fill="#4338ca"/><rect x="28" y="20" width="16" height="6" rx="2" fill="#e0e7ff"/></svg>` },
+  { id: "st_fire", label: "불꽃 집중", svg: `<svg viewBox="0 0 64 64"><path d="M34 6C34 6 48 18 48 34C48 46 39 56 28 56C17 56 10 47 10 37C10 27 18 20 18 20C18 20 17 28 23 28C21 19 34 6 34 6Z" fill="#f97316"/><path d="M31 28C31 28 39 34 39 42C39 48 34 52 29 52C24 52 20 48 20 43C20 37 26 34 26 34C26 34 26 38 29 38C28 33 31 28 31 28Z" fill="#fde047"/></svg>` },
+  { id: "st_tape", label: "마스킹테이프", svg: `<svg viewBox="0 0 120 36"><polygon points="4,4 116,2 112,34 2,32" fill="rgba(167, 139, 250, 0.65)"/><line x1="12" y1="18" x2="108" y2="18" stroke="#fff" stroke-dasharray="6 4" stroke-width="2"/></svg>` },
+  { id: "st_badge", label: "목표달성 배지", svg: `<svg viewBox="0 0 120 40"><rect x="4" y="4" width="112" height="32" rx="16" fill="#0ea5e9"/><text x="60" y="25" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">오늘도 화이팅!</text></svg>` }
+];
+
+/* ============================================================================
+   3. 초기화 및 닉네임 로그인 / 로컬 데이터 관리
+   ============================================================================ */
+window.addEventListener("DOMContentLoaded", () => {
+  renderSavedAccounts();
+  renderBuiltinStickerGallery();
+  initDragAndDropWidgets();
+
+  // 이전 세션 자동 복구
+  const lastUser = localStorage.getItem("momentum_last_user");
+  if (lastUser) {
+    document.getElementById("loginNicknameInput").value = lastUser;
+  }
+});
+
+function showToast(msg) {
+  const box = document.getElementById("toastBox");
+  const el = document.createElement("div");
+  el.className = "toast-item";
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(() => el.remove(), 2600);
+}
+
+function renderSavedAccounts() {
+  const listEl = document.getElementById("savedAccountsList");
+  const area = document.getElementById("savedAccountsArea");
+  const users = JSON.parse(localStorage.getItem("momentum_users_index") || "[]");
+  if (users.length === 0) {
+    area.style.display = "none";
+    return;
+  }
+  area.style.display = "block";
+  listEl.innerHTML = users.map(u => `<span class="account-chip" onclick="loginAs('${escapeHtml(u)}')">👤 ${escapeHtml(u)}</span>`).join("");
+}
+
+function handleLogin() {
+  const nick = document.getElementById("loginNicknameInput").value.trim();
+  if (!nick) {
+    showToast("닉네임을 입력해주세요!");
+    return;
+  }
+  loginAs(nick);
+}
+
+function loginAs(nick) {
+  currentUser = nick;
+  localStorage.setItem("momentum_last_user", nick);
+
+  // 사용자 목록 인덱스 업데이트
+  const users = JSON.parse(localStorage.getItem("momentum_users_index") || "[]");
+  if (!users.includes(nick)) {
+    users.push(nick);
+    localStorage.setItem("momentum_users_index", JSON.stringify(users));
+  }
+
+  // 사용자 데이터 로드 또는 초기화
+  const raw = localStorage.getItem(`momentum_data_${nick}`);
+  if (raw) {
+    userData = JSON.parse(raw);
+    if (!userData.widgets) userData.widgets = JSON.parse(JSON.stringify(DEFAULT_WIDGETS));
+    if (!userData.stickers) userData.stickers = [];
+    if (!userData.customStickers) userData.customStickers = [];
+    if (!userData.conceptColor) userData.conceptColor = "#4f46e5";
+    if (!userData.focusMediaSettings) userData.focusMediaSettings = { dim: 45, blur: 0, theme: "aurora", quote: "지금의 몰입이 내일의 나를 만든다." };
+  } else {
+    userData = createDefaultUserData(nick);
+    saveUserData();
+  }
+
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("headerUserTitle").textContent = nick;
+  document.getElementById("conceptColorPicker").value = userData.conceptColor;
+
+  applyConceptColor(userData.conceptColor, false);
+  applyWidgetLayout();
+  renderPlacedStickers();
+  refreshAllViews();
+  showToast(`환영합니다, ${nick}님!`);
+}
+
+function logoutUser() {
+  currentUser = "";
+  renderSavedAccounts();
+  document.getElementById("loginScreen").style.display = "flex";
+}
+
+function createDefaultUserData(nick) {
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    nickname: nick,
+    conceptColor: "#4f46e5",
+    dday: { title: "목표 시험일", date: "" },
+    subjects: [
+      { id: "kor", name: "국어", color: "#ef4444" },
+      { id: "math", name: "수학", color: "#4f46e5" },
+      { id: "eng", name: "영어", color: "#0ea5e9" },
+      { id: "sci", name: "탐구/전공", color: "#10b981" }
+    ],
+    widgets: JSON.parse(JSON.stringify(DEFAULT_WIDGETS)),
+    stickers: [],
+    customStickers: [],
+    focusMediaSettings: { dim: 45, blur: 0, theme: "aurora", quote: "지금의 몰입이 내일의 나를 만든다." },
+    days: {
+      [today]: {
+        schedules: [
+          { id: "s1", track: "plan", category: "school", subjectId: "kor", title: "학교 정규수업 (오전)", start: "09:00", end: "12:00" },
+          { id: "s2", track: "plan", category: "study", subjectId: "math", title: "수학 미적분 개념복습", start: "19:00", end: "21:00" },
+          { id: "s3", track: "actual", category: "school", subjectId: "kor", title: "학교 정규수업 (오전)", start: "09:00", end: "12:00" }
+        ],
+        todos: [
+          { id: "t1", subjectId: "math", text: "수학 오답노트 10문제 정리", done: false },
+          { id: "t2", subjectId: "eng", text: "영단어 Day 15 암기", done: true }
+        ],
+        memo: "",
+        rating: 0
+      }
+    }
+  };
+}
+
+function saveUserData() {
+  if (!currentUser || !userData) return;
+  localStorage.setItem(`momentum_data_${currentUser}`, JSON.stringify(userData));
+}
+
+function getDayData(dateStr) {
+  if (!userData.days[dateStr]) {
+    userData.days[dateStr] = { schedules: [], todos: [], memo: "", rating: 0 };
+  }
+  return userData.days[dateStr];
+}
+
+/* ============================================================================
+   4. 색채학(HSL 색상환) 기반 자동 조화 컬러 팔레트 생성기
+   ============================================================================ */
+function hexToHsl(hex) {
+  let r = parseInt(hex.slice(1, 3), 16) / 255;
+  let g = parseInt(hex.slice(3, 5), 16) / 255;
+  let b = parseInt(hex.slice(5, 7), 16) / 255;
+  let max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0;
+  } else {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h *= 60;
+  }
+  return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+function hslToCss(h, s, l) {
+  return `hsl(${(h + 360) % 360}, ${Math.min(100, Math.max(0, s))}%, ${Math.min(100, Math.max(0, l))}%)`;
+}
+
+function hexToRgbTuple(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r}, ${g}, ${b}`;
+}
+
+function applyConceptColor(hexColor, persist = true) {
+  const { h, s, l } = hexToHsl(hexColor);
+  const root = document.documentElement;
+
+  // 메인 색상 및 호버/파스텔 틴트
+  const primaryHover = hslToCss(h, s, Math.max(20, l - 10));
+  const primaryLight = hslToCss(h, Math.min(90, s), 94);
+
+  // 유사색(Analogous +35도) 기반 조화로운 보조 강조색
+  const secHue = (h + 35) % 360;
+  const secondary = hslToCss(secHue, Math.min(85, s), Math.min(55, Math.max(42, l)));
+  const secondaryLight = hslToCss(secHue, 85, 93);
+
+  // 5단계 공부 농도 히트맵 그라데이션 (연한 파스텔 -> 딥 다크)
+  const heat1 = hslToCss(h, Math.min(85, s), 90);
+  const heat2 = hslToCss(h, Math.min(85, s), 76);
+  const heat3 = hslToCss(h, Math.min(90, s), 58);
+  const heat4 = hslToCss(h, Math.min(90, s), 44);
+  const heat5 = hslToCss(h, Math.min(95, s), 28);
+
+  root.style.setProperty("--primary", hexColor);
+  root.style.setProperty("--primary-hover", primaryHover);
+  root.style.setProperty("--primary-light", primaryLight);
+  root.style.setProperty("--primary-rgb", hexToRgbTuple(hexColor));
+  root.style.setProperty("--secondary", secondary);
+  root.style.setProperty("--secondary-light", secondaryLight);
+  root.style.setProperty("--heat-1", heat1);
+  root.style.setProperty("--heat-2", heat2);
+  root.style.setProperty("--heat-3", heat3);
+  root.style.setProperty("--heat-4", heat4);
+  root.style.setProperty("--heat-5", heat5);
+
+  document.getElementById("conceptColorHex").textContent = hexColor.toUpperCase();
+  document.getElementById("conceptColorPicker").value = hexColor;
+
+  // 미리보기 스와치 렌더링
+  const preview = document.getElementById("harmonyPreviewBox");
+  if (preview) {
+    preview.innerHTML = `
+      <div class="harmony-swatch" style="background:${hexColor};color:#fff;">메인</div>
+      <div class="harmony-swatch" style="background:${secondary};color:#fff;">보조색</div>
+      <div class="harmony-swatch" style="background:${primaryLight};color:${hexColor};">틴트</div>
+      <div class="harmony-swatch" style="background:${heat2};color:#0f172a;">농도 2</div>
+      <div class="harmony-swatch" style="background:${heat5};color:#fff;">최고농도</div>
+    `;
+  }
+
+  if (persist && userData) {
+    userData.conceptColor = hexColor;
+    saveUserData();
+  }
+}
+
+function toggleDarkMode() {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+}
+
+/* ============================================================================
+   5. 모듈형 대시보드 위젯 배치 (드래그 앤 드롭, 너비 전환, 추가/숨김)
+   ============================================================================ */
+function toggleDashboardEditMode() {
+  isEditMode = !isEditMode;
+  const grid = document.getElementById("widgetGrid");
+  const banner = document.getElementById("editModeBanner");
+  const btn = document.getElementById("btnToggleEditMode");
+
+  grid.classList.toggle("editing", isEditMode);
+  banner.classList.toggle("visible", isEditMode);
+  btn.classList.toggle("btn-active-edit", isEditMode);
+
+  grid.querySelectorAll(".widget-card").forEach(card => {
+    card.setAttribute("draggable", isEditMode ? "true" : "false");
+  });
+}
+
+function applyWidgetLayout() {
+  const grid = document.getElementById("widgetGrid");
+  userData.widgets.forEach(w => {
+    const card = grid.querySelector(`[data-widget-id="${w.id}"]`);
+    if (!card) return;
+    card.style.display = w.visible ? "block" : "none";
+    card.classList.remove("span-6", "span-12");
+    card.classList.add(`span-${w.span || 6}`);
+    grid.appendChild(card); // 저장된 순서대로 DOM 재배열
+  });
+  renderWidgetManagerList();
+}
+
+function toggleWidgetSpan(widgetId) {
+  const w = userData.widgets.find(item => item.id === widgetId);
+  if (!w) return;
+  w.span = w.span === 12 ? 6 : 12;
+  saveUserData();
+  applyWidgetLayout();
+}
+
+function hideWidget(widgetId) {
+  const w = userData.widgets.find(item => item.id === widgetId);
+  if (!w) return;
+  w.visible = false;
+  saveUserData();
+  applyWidgetLayout();
+  showToast("위젯이 숨겨졌습니다. [기능 위젯 관리]에서 언제든 다시 추가할 수 있습니다.");
+}
+
+function toggleWidgetVisibility(widgetId) {
+  const w = userData.widgets.find(item => item.id === widgetId);
+  if (!w) return;
+  w.visible = !w.visible;
+  saveUserData();
+  applyWidgetLayout();
+}
+
+function resetDashboardLayout() {
+  userData.widgets = JSON.parse(JSON.stringify(DEFAULT_WIDGETS));
+  saveUserData();
+  applyWidgetLayout();
+  showToast("메인 화면 위젯 배치가 기본값으로 초기화되었습니다.");
+}
+
+function renderWidgetManagerList() {
+  const list = document.getElementById("widgetToggleList");
+  if (!list || !userData) return;
+  list.innerHTML = userData.widgets.map(w => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bg-subtle);">
+      <span style="font-weight:700;font-size:0.88rem;">${w.name}</span>
+      <button class="btn btn-sm ${w.visible ? "btn-primary" : "btn-outline"}" onclick="toggleWidgetVisibility('${w.id}')">
+        ${w.visible ? "표시 중 ✓" : "+ 화면에 추가"}
+      </button>
+    </div>
+  `).join("");
+}
+
+function initDragAndDropWidgets() {
+  const grid = document.getElementById("widgetGrid");
+  let draggedCard = null;
+
+  grid.addEventListener("dragstart", (e) => {
+    if (!isEditMode) return;
+    const card = e.target.closest(".widget-card");
+    if (!card) return;
+    draggedCard = card;
+    card.classList.add("dragging");
+  });
+
+  grid.addEventListener("dragend", (e) => {
+    if (draggedCard) draggedCard.classList.remove("dragging");
+    draggedCard = null;
+    // DOM 순서를 userData.widgets에 동기화
+    if (userData) {
+      const newOrder = [];
+      grid.querySelectorAll(".widget-card").forEach(c => {
+        const id = c.getAttribute("data-widget-id");
+        const found = userData.widgets.find(w => w.id === id);
+        if (found) newOrder.push(found);
+      });
+      userData.widgets = newOrder;
+      saveUserData();
+    }
+  });
+
+  grid.addEventListener("dragover", (e) => {
+    if (!isEditMode || !draggedCard) return;
+    e.preventDefault();
+    const targetCard = e.target.closest(".widget-card");
+    if (targetCard && targetCard !== draggedCard) {
+      const rect = targetCard.getBoundingClientRect();
+      const isAfter = (e.clientY - rect.top) > (rect.height / 2);
+      if (isAfter) {
+        targetCard.after(draggedCard);
+      } else {
+        targetCard.before(draggedCard);
+      }
+    }
+  });
+}
+
+/* ============================================================================
+   6. 플래너 꾸미기 스티커 기능 & 자유 배치 (드래그, 확대/축소, 회전, 이미지 업로드)
+   ============================================================================ */
+function renderBuiltinStickerGallery() {
+  const box = document.getElementById("builtinStickerGallery");
+  box.innerHTML = BUILTIN_STICKERS.map(st => `
+    <button class="sticker-pick-btn" onclick="addStickerToCanvas('svg', '${st.id}')">
+      <div style="width:44px;height:44px;">${st.svg}</div>
+      <span style="font-size:0.72rem;font-weight:700;color:var(--text-sub);">${st.label}</span>
+    </button>
+  `).join("");
+}
+
+function handleCustomStickerUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    // 크기가 너무 큰 경우 캔버스로 리사이징하여 localStorage 용량 절약
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const maxDim = 240;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      const compressedDataUrl = file.type === "image/gif" ? dataUrl : canvas.toDataURL("image/png", 0.88);
+      addStickerToCanvas("image", compressedDataUrl);
+      closeModal("stickerModal");
+      showToast("나만의 이미지 스티커가 화면에 추가되었습니다!");
+    };
+    img.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = "";
+}
+
+function addStickerToCanvas(type, payload) {
+  const newSticker = {
+    id: "stk_" + Date.now(),
+    type, // 'svg' | 'image'
+    payload,
+    x: 120 + Math.floor(Math.random() * 140),
+    y: 120 + Math.floor(Math.random() * 120),
+    size: 76,
+    rotate: 0
+  };
+  userData.stickers.push(newSticker);
+  saveUserData();
+  renderPlacedStickers();
+  selectSticker(newSticker.id);
+}
+
+function renderPlacedStickers() {
+  const layer = document.getElementById("stickerLayer");
+  if (!userData) return;
+  layer.innerHTML = userData.stickers.map(st => {
+    let inner = "";
+    if (st.type === "svg") {
+      const found = BUILTIN_STICKERS.find(b => b.id === st.payload);
+      inner = found ? found.svg : "";
+    } else {
+      inner = `<img src="${st.payload}" alt="커스텀 스티커">`;
+    }
+    const isSel = selectedStickerId === st.id ? "selected" : "";
+    return `
+      <div class="placed-sticker ${isSel}" id="${st.id}"
+           style="left:${st.x}px; top:${st.y}px; width:${st.size}px; height:${st.size}px; transform:rotate(${st.rotate}deg);"
+           onpointerdown="startStickerDrag(event, '${st.id}')">
+        ${inner}
+      </div>
+    `;
+  }).join("");
+}
+
+function selectSticker(id) {
+  selectedStickerId = id;
+  document.querySelectorAll(".placed-sticker").forEach(el => {
+    el.classList.toggle("selected", el.id === id);
+  });
+  document.getElementById("stickerToolbar").classList.add("visible");
+}
+
+function deselectSticker() {
+  selectedStickerId = null;
+  document.querySelectorAll(".placed-sticker").forEach(el => el.classList.remove("selected"));
+  document.getElementById("stickerToolbar").classList.remove("visible");
+}
+
+function startStickerDrag(e, id) {
+  e.stopPropagation();
+  selectSticker(id);
+  const st = userData.stickers.find(s => s.id === id);
+  if (!st) return;
+
+  const startX = e.clientX;
+  const startY = e.clientY;
+  const origX = st.x;
+  const origY = st.y;
+  const el = document.getElementById(id);
+
+  const onMove = (ev) => {
+    st.x = Math.max(0, origX + (ev.clientX - startX));
+    st.y = Math.max(0, origY + (ev.clientY - startY));
+    if (el) {
+      el.style.left = st.x + "px";
+      el.style.top = st.y + "px";
+    }
+  };
+  const onUp = () => {
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("pointerup", onUp);
+    saveUserData();
+  };
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("pointerup", onUp);
+}
+
+function adjustSelectedSticker(prop, delta) {
+  if (!selectedStickerId) return;
+  const st = userData.stickers.find(s => s.id === selectedStickerId);
+  if (!st) return;
+  if (prop === "scale") {
+    st.size = Math.min(240, Math.max(36, Math.round(st.size * (1 + delta))));
+  } else if (prop === "rotate") {
+    st.rotate = (st.rotate + delta) % 360;
+  }
+  saveUserData();
+  renderPlacedStickers();
+}
+
+function deleteSelectedSticker() {
+  if (!selectedStickerId) return;
+  userData.stickers = userData.stickers.filter(s => s.id !== selectedStickerId);
+  saveUserData();
+  deselectSticker();
+  renderPlacedStickers();
+}
+
+function clearAllPlacedStickers() {
+  userData.stickers = [];
+  saveUserData();
+  deselectSticker();
+  renderPlacedStickers();
+  showToast("모든 스티커가 제거되었습니다.");
+}
+
+function toggleStickerVisibility() {
+  const layer = document.getElementById("stickerLayer");
+  layer.classList.toggle("hidden-layer");
+  const hidden = layer.classList.contains("hidden-layer");
+  if (hidden) deselectSticker();
+  showToast(hidden ? "스티커 레이어를 숨겼습니다." : "스티커 레이어를 표시합니다.");
+}
+
+/* ============================================================================
+   7. 감성 풀스크린 집중 타이머 & 사진/동영상 배경 처리
+   ============================================================================ */
+function openFocusBgModal() {
+  openModal("focusBgModal");
+}
+
+async function handleFocusMediaUpload(event) {
+  const file = event.target.files[0];
+  if (!file || !currentUser) return;
+  try {
+    await MediaDB.saveMedia(`focus_bg_${currentUser}`, file, file.type);
+    await applySavedFocusMedia();
+    showToast("배경 미디어가 IndexedDB에 안전하게 저장되었습니다!");
+  } catch (err) {
+    showToast("배경 파일 저장 중 오류가 발생했습니다.");
+  }
+  event.target.value = "";
+}
+
+async function clearCustomFocusMedia() {
+  if (!currentUser) return;
+  await MediaDB.deleteMedia(`focus_bg_${currentUser}`);
+  if (activeMediaObjectURL) {
+    URL.revokeObjectURL(activeMediaObjectURL);
+    activeMediaObjectURL = null;
+  }
+  document.getElementById("focusBgImage").style.display = "none";
+  document.getElementById("focusBgVideo").style.display = "none";
+  document.getElementById("focusMediaControls").classList.remove("visible");
+  showToast("업로드된 배경이 초기화되었습니다.");
+}
+
+async function applySavedFocusMedia() {
+  const imgEl = document.getElementById("focusBgImage");
+  const vidEl = document.getElementById("focusBgVideo");
+  const ctrlBar = document.getElementById("focusMediaControls");
+
+  if (!currentUser) return;
+  const record = await MediaDB.getMedia(`focus_bg_${currentUser}`);
+  if (!record || !record.blob) {
+    imgEl.style.display = "none";
+    vidEl.style.display = "none";
+    ctrlBar.classList.remove("visible");
+    return;
+  }
+
+  if (activeMediaObjectURL) URL.revokeObjectURL(activeMediaObjectURL);
+  activeMediaObjectURL = URL.createObjectURL(record.blob);
+
+  if (record.mimeType && record.mimeType.startsWith("video/")) {
+    imgEl.style.display = "none";
+    vidEl.src = activeMediaObjectURL;
+    vidEl.style.display = "block";
+    vidEl.play().catch(() => {});
+  } else {
+    vidEl.style.display = "none";
+    imgEl.src = activeMediaObjectURL;
+    imgEl.style.display = "block";
+  }
+
+  ctrlBar.classList.add("visible");
+  const settings = userData.focusMediaSettings || { dim: 45, blur: 0 };
+  document.getElementById("focusDimRange").value = settings.dim;
+  document.getElementById("focusBlurRange").value = settings.blur;
+  updateFocusMediaStyle();
+}
+
+function updateFocusMediaStyle() {
+  const dim = document.getElementById("focusDimRange").value;
+  const blur = document.getElementById("focusBlurRange").value;
+  const dimmer = document.getElementById("focusMediaDimmer");
+  dimmer.style.background = `rgba(0, 0, 0, ${dim / 100})`;
+  dimmer.style.backdropFilter = `blur(${blur}px)`;
+  if (userData) {
+    userData.focusMediaSettings.dim = Number(dim);
+    userData.focusMediaSettings.blur = Number(blur);
+    saveUserData();
+  }
+}
+
+function setFocusPresetTheme(themeName) {
+  const overlay = document.getElementById("focusOverlay");
+  overlay.className = `active f-theme-${themeName}`;
+  if (userData) {
+    userData.focusMediaSettings.theme = themeName;
+    saveUserData();
+  }
+}
+
+function toggleQtSubject() {
+  const cat = document.getElementById("qtCategory").value;
+  document.getElementById("qtSubject").style.display = cat === "study" ? "inline-block" : "none";
+}
+
+async function launchFocusTimer() {
+  const cat = document.getElementById("qtCategory").value;
+  const subId = document.getElementById("qtSubject").value;
+  const mode = document.getElementById("qtMode").value;
+  const rawTitle = document.getElementById("qtTaskTitle").value.trim();
+
+  const subObj = userData.subjects.find(s => s.id === subId) || userData.subjects[0];
+  timerContext = {
+    category: cat,
+    subjectId: subId,
+    title: rawTitle || (cat === "school" ? "학교 정규 수업" : `${subObj.name} 집중 학습`)
+  };
+
+  timerSeconds = 0;
+  timerPaused = false;
+  timerTargetSeconds = mode === "pomo25" ? 1500 : (mode === "pomo50" ? 3000 : 0);
+
+  const nowStr = getNowTimeStr();
+  document.getElementById("focusStartInput").value = nowStr;
+  document.getElementById("focusEndInput").value = nowStr;
+  document.getElementById("focusSubjectBadge").textContent = cat === "school" ? "🏫 학교/수업" : `📚 ${subObj.name}`;
+  document.getElementById("focusTaskSubtitle").textContent = timerContext.title;
+  document.getElementById("focusQuoteText").textContent = `"${userData.focusMediaSettings.quote}"`;
+  document.getElementById("btnFocusPause").textContent = "⏸ 일시정지";
+
+  const savedTheme = userData.focusMediaSettings.theme || "aurora";
+  document.getElementById("focusOverlay").className = `active f-theme-${savedTheme}`;
+  await applySavedFocusMedia();
+
+  updateFocusDigits();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (!timerPaused) {
+      timerSeconds++;
+      document.getElementById("focusEndInput").value = getNowTimeStr();
+      updateFocusDigits();
+    }
+  }, 1000);
+}
+
+function updateFocusDigits() {
+  const displaySec = timerTargetSeconds > 0 ? Math.max(0, timerTargetSeconds - timerSeconds) : timerSeconds;
+  const h = String(Math.floor(displaySec / 3600)).padStart(2, "0");
+  const m = String(Math.floor((displaySec % 3600) / 60)).padStart(2, "0");
+  const s = String(displaySec % 60).padStart(2, "0");
+  document.getElementById("focusTimerDigits").textContent = `${h}:${m}:${s}`;
+  recalcFocusTimes();
+}
+
+function recalcFocusTimes() {
+  const sMin = timeToMins(document.getElementById("focusStartInput").value);
+  const eMin = timeToMins(document.getElementById("focusEndInput").value);
+  const diff = Math.max(0, eMin - sMin);
+  document.getElementById("focusDurationPreview").textContent = `타임테이블 반영: ${formatMinsKor(diff)}`;
+}
+
+function toggleFocusPause() {
+  timerPaused = !timerPaused;
+  document.getElementById("btnFocusPause").textContent = timerPaused ? "▶ 계속하기" : "⏸ 일시정지";
+}
+
+function editFocusQuoteInline() {
+  const el = document.getElementById("focusQuoteText");
+  if (el.querySelector("input")) return;
+  const cur = userData.focusMediaSettings.quote;
+  el.innerHTML = `<input type="text" id="quoteEditField" value="${escapeHtml(cur)}" style="padding:4px 10px;border-radius:8px;border:none;font-size:0.95rem;width:280px;text-align:center;" onkeydown="if(event.key==='Enter') saveQuoteInline()" onblur="saveQuoteInline()">`;
+  document.getElementById("quoteEditField").focus();
+}
+
+function saveQuoteInline() {
+  const field = document.getElementById("quoteEditField");
+  if (!field) return;
+  const val = field.value.trim() || "지금의 몰입이 내일의 나를 만든다.";
+  userData.focusMediaSettings.quote = val;
+  saveUserData();
+  document.getElementById("focusQuoteText").textContent = `"${val}"`;
+}
+
+function finishFocusTimer() {
+  clearInterval(timerInterval);
+  const startStr = document.getElementById("focusStartInput").value;
+  let endStr = document.getElementById("focusEndInput").value;
+  if (timeToMins(endStr) <= timeToMins(startStr)) {
+    endStr = minsToTime(timeToMins(startStr) + Math.max(1, Math.round(timerSeconds / 60)));
+  }
+
+  const day = getDayData(selectedDate);
+  day.schedules.push({
+    id: "act_" + Date.now(),
+    track: "actual",
+    category: timerContext.category,
+    subjectId: timerContext.subjectId,
+    title: timerContext.title,
+    start: startStr,
+    end: endStr
+  });
+  saveUserData();
+  document.getElementById("focusOverlay").classList.remove("active");
+  refreshAllViews();
+  showToast(`실제 타임테이블(${startStr}~${endStr})에 기록되었습니다!`);
+}
+
+function cancelFocusTimer() {
+  clearInterval(timerInterval);
+  document.getElementById("focusOverlay").classList.remove("active");
+}
+
+/* ============================================================================
+   8. 3파트 좌우 비교 타임테이블 & 할 일 & 통계 & 히트맵 & 주간 그래프
+   ============================================================================ */
+function refreshAllViews() {
+  if (!userData) return;
+  document.getElementById("currentDateText").textContent = formatKoreanDate(selectedDate);
+  document.getElementById("nativeDatePicker").value = selectedDate;
+  renderDdayBadge();
+  syncSubjectDropdowns();
+  renderSummaryStats();
+  renderTodos();
+  renderTimetable();
+  renderHeatmapCalendar();
+  renderWeeklyChart();
+  renderReflection();
+}
+
+function syncSubjectDropdowns() {
+  const opts = userData.subjects.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join("");
+  ["qtSubject", "todoSubSelect", "schedSubject"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+  const list = document.getElementById("subjectManageList");
+  if (list) {
+    list.innerHTML = userData.subjects.map(s => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;background:var(--bg-subtle);">
+        <span style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:0.88rem;">
+          <span style="width:14px;height:14px;border-radius:50%;background:${s.color};"></span>${escapeHtml(s.name)}
+        </span>
+        ${userData.subjects.length > 1 ? `<button class="btn btn-danger btn-sm" onclick="deleteSubject('${s.id}')">삭제</button>` : ""}
+      </div>
+    `).join("");
+  }
+}
+
+function addSubject() {
+  const name = document.getElementById("newSubName").value.trim();
+  const color = document.getElementById("newSubColor").value;
+  if (!name) return;
+  userData.subjects.push({ id: "sub_" + Date.now(), name, color });
+  document.getElementById("newSubName").value = "";
+  saveUserData();
+  refreshAllViews();
+}
+
+function deleteSubject(id) {
+  userData.subjects = userData.subjects.filter(s => s.id !== id);
+  saveUserData();
+  refreshAllViews();
+}
+
+function renderSummaryStats() {
+  const day = getDayData(selectedDate);
+  let planStudy = 0, actualStudy = 0, actualSchool = 0;
+
+  day.schedules.forEach(item => {
+    const dur = Math.max(0, timeToMins(item.end) - timeToMins(item.start));
+    if (item.track === "plan" && item.category === "study") planStudy += dur;
+    if (item.track === "actual") {
+      if (item.category === "school") actualSchool += dur;
+      else actualStudy += dur;
+    }
+  });
+
+  const rate = planStudy > 0 ? Math.round((actualStudy / planStudy) * 100) : (actualStudy > 0 ? 100 : 0);
+  document.getElementById("statActualStudy").textContent = formatMinsKor(actualStudy);
+  document.getElementById("statPlanStudySub").textContent = `계획 ${formatMinsKor(planStudy)} 대비 ${rate}%`;
+  document.getElementById("statActualSchool").textContent = formatMinsKor(actualSchool);
+
+  const doneTodos = day.todos.filter(t => t.done).length;
+  const todoRate = day.todos.length > 0 ? Math.round((doneTodos / day.todos.length) * 100) : 0;
+  document.getElementById("statTodoRate").textContent = `${todoRate}%`;
+  document.getElementById("statTodoCountSub").textContent = `${doneTodos} / ${day.todos.length} 완료`;
+  document.getElementById("statBlockCount").textContent = `${day.schedules.length}개`;
+}
+
+function setTimetablePart(part) {
+  currentPartFilter = part;
+  document.querySelectorAll(".part-tab").forEach(b => b.classList.toggle("active", b.dataset.part === part));
+  renderTimetable();
+}
+
+function renderTimetable() {
+  const container = document.getElementById("timetableContainer");
+  const day = getDayData(selectedDate);
+  const parts = [
+    { key: "morning", label: "🌅 아침 파트 (06:00 ~ 12:00)", startH: 6, endH: 12 },
+    { key: "afternoon", label: "☀️ 점심 파트 (12:00 ~ 18:00)", startH: 12, endH: 18 },
+    { key: "evening", label: "🌙 저녁 파트 (18:00 ~ 24:00)", startH: 18, endH: 24 }
+  ];
+
+  const visibleParts = currentPartFilter === "all" ? parts : parts.filter(p => p.key === currentPartFilter);
+
+  container.innerHTML = visibleParts.map(p => {
+    const pStartMin = p.startH * 60;
+    const pEndMin = p.endH * 60;
+    const totalHeight = (p.endH - p.startH) * 48;
+
+    let hoursHtml = "";
+    let planSlots = "";
+    let actualSlots = "";
+    for (let h = p.startH; h < p.endH; h++) {
+      const hh = String(h).padStart(2, "0") + ":00";
+      hoursHtml += `<div class="tt-hour-label">${String(h).padStart(2, "0")}시</div>`;
+      planSlots += `<div class="tt-slot" onclick="openScheduleModal('plan', '${hh}')"></div>`;
+      actualSlots += `<div class="tt-slot" onclick="openScheduleModal('actual', '${hh}')"></div>`;
+    }
+
+    const renderBlocks = (track) => day.schedules
+      .filter(s => s.track === track)
+      .map(s => {
+        const sMin = timeToMins(s.start);
+        const eMin = timeToMins(s.end);
+        const visStart = Math.max(sMin, pStartMin);
+        const visEnd = Math.min(eMin, pEndMin);
+        if (visEnd <= visStart) return "";
+        const top = (visStart - pStartMin) * 0.8;
+        const height = Math.max(20, (visEnd - visStart) * 0.8);
+        const sub = userData.subjects.find(sub => sub.id === s.subjectId) || userData.subjects[0];
+        const isSchool = s.category === "school";
+        return `
+          <div class="tt-block ${isSchool ? "is-school" : ""}"
+               style="top:${top}px; height:${height}px; background:${isSchool ? "" : sub.color}; color:#fff;"
+               onclick="event.stopPropagation(); openEditSchedule('${s.id}')">
+            <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isSchool ? "🏫 " : ""}${escapeHtml(s.title)}</div>
+            ${height >= 32 ? `<div style="font-size:0.65rem;opacity:0.9;">${s.start}~${s.end}</div>` : ""}
+          </div>
+        `;
+      }).join("");
+
+    return `
+      <div class="tt-part-section">
+        <div class="tt-part-label"><span>${p.label}</span></div>
+        <div class="tt-grid" style="height:${totalHeight}px;">
+          <div class="tt-time-col">${hoursHtml}</div>
+          <div class="tt-lane">${planSlots}${renderBlocks("plan")}</div>
+          <div class="tt-lane">${actualSlots}${renderBlocks("actual")}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openScheduleModal(track, startTime) {
+  document.getElementById("schedEditId").value = "";
+  document.getElementById("schedModalTitle").textContent = track === "plan" ? "📋 계획 일정 추가" : "⚡ 실제 실행 기록 추가";
+  document.getElementById("schedTrack").value = track;
+  document.getElementById("schedCategory").value = "study";
+  document.getElementById("schedSubGroup").style.display = "block";
+  document.getElementById("schedTitle").value = "";
+  document.getElementById("schedStart").value = startTime;
+  document.getElementById("schedEnd").value = minsToTime(Math.min(1439, timeToMins(startTime) + 60));
+  document.getElementById("btnDeleteSched").style.display = "none";
+  openModal("scheduleModal");
+}
+
+function openEditSchedule(id) {
+  const day = getDayData(selectedDate);
+  const item = day.schedules.find(s => s.id === id);
+  if (!item) return;
+  document.getElementById("schedEditId").value = item.id;
+  document.getElementById("schedModalTitle").textContent = "✏️ 일정 수정";
+  document.getElementById("schedTrack").value = item.track;
+  document.getElementById("schedCategory").value = item.category;
+  document.getElementById("schedSubGroup").style.display = item.category === "study" ? "block" : "none";
+  document.getElementById("schedSubject").value = item.subjectId;
+  document.getElementById("schedTitle").value = item.title;
+  document.getElementById("schedStart").value = item.start;
+  document.getElementById("schedEnd").value = item.end;
+  document.getElementById("btnDeleteSched").style.display = "inline-flex";
+  openModal("scheduleModal");
+}
+
+function saveScheduleItem() {
+  const editId = document.getElementById("schedEditId").value;
+  const track = document.getElementById("schedTrack").value;
+  const category = document.getElementById("schedCategory").value;
+  const subjectId = document.getElementById("schedSubject").value;
+  const start = document.getElementById("schedStart").value;
+  const end = document.getElementById("schedEnd").value;
+  const rawTitle = document.getElementById("schedTitle").value.trim();
+
+  if (timeToMins(end) <= timeToMins(start)) {
+    showToast("종료 시각은 시작 시각보다 늦어야 합니다.");
+    return;
+  }
+  const sub = userData.subjects.find(s => s.id === subjectId) || userData.subjects[0];
+  const title = rawTitle || (category === "school" ? "학교 정규 수업" : sub.name);
+  const day = getDayData(selectedDate);
+
+  if (editId) {
+    const idx = day.schedules.findIndex(s => s.id === editId);
+    if (idx !== -1) day.schedules[idx] = { id: editId, track, category, subjectId, title, start, end };
+  } else {
+    day.schedules.push({ id: "sc_" + Date.now(), track, category, subjectId, title, start, end });
+  }
+  saveUserData();
+  closeModal("scheduleModal");
+  refreshAllViews();
+}
+
+function deleteScheduleItem() {
+  const editId = document.getElementById("schedEditId").value;
+  const day = getDayData(selectedDate);
+  day.schedules = day.schedules.filter(s => s.id !== editId);
+  saveUserData();
+  closeModal("scheduleModal");
+  refreshAllViews();
+}
+
+function addTodoItem() {
+  const input = document.getElementById("newTodoInput");
+  const text = input.value.trim();
+  if (!text) return;
+  const day = getDayData(selectedDate);
+  day.todos.push({ id: "td_" + Date.now(), subjectId: document.getElementById("todoSubSelect").value, text, done: false });
+  input.value = "";
+  saveUserData();
+  refreshAllViews();
+}
+
+function toggleTodoItem(id) {
+  const day = getDayData(selectedDate);
+  const t = day.todos.find(item => item.id === id);
+  if (t) t.done = !t.done;
+  saveUserData();
+  refreshAllViews();
+}
+
+function deleteTodoItem(id) {
+  const day = getDayData(selectedDate);
+  day.todos = day.todos.filter(item => item.id !== id);
+  saveUserData();
+  refreshAllViews();
+}
+
+function renderTodos() {
+  const day = getDayData(selectedDate);
+  const box = document.getElementById("todoListBox");
+  if (day.todos.length === 0) {
+    box.innerHTML = `<div style="text-align:center;padding:14px;font-size:0.8rem;color:var(--text-muted);">등록된 할 일이 없습니다.</div>`;
+    return;
+  }
+  box.innerHTML = day.todos.map(t => {
+    const sub = userData.subjects.find(s => s.id === t.subjectId) || userData.subjects[0];
+    return `
+      <div class="todo-item ${t.done ? "done" : ""}">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;">
+          <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTodoItem('${t.id}')" style="accent-color:var(--primary);width:16px;height:16px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:${sub.color};"></span>
+          <span>${escapeHtml(t.text)}</span>
+        </label>
+        <button class="btn btn-ghost btn-sm" onclick="deleteTodoItem('${t.id}')">✕</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderHeatmapCalendar() {
+  document.getElementById("calMonthLabel").textContent = `${calYear}년 ${calMonth + 1}월`;
+  const grid = document.getElementById("heatmapCalendarGrid");
+  const heads = ["일", "월", "화", "수", "목", "금", "토"].map(d => `<div class="cal-day-head">${d}</div>`).join("");
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const lastDate = new Date(calYear, calMonth + 1, 0).getDate();
+
+  let cells = "";
+  for (let i = 0; i < firstDay; i++) cells += `<div></div>`;
+
+  for (let d = 1; d <= lastDate; d++) {
+    const dStr = `${calYear}-${String(calMonth + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const rec = userData.days[dStr];
+    let studyMins = 0;
+    if (rec) {
+      rec.schedules.forEach(s => {
+        if (s.track === "actual" && s.category === "study") {
+          studyMins += Math.max(0, timeToMins(s.end) - timeToMins(s.start));
+        }
+      });
+    }
+    const hrs = studyMins / 60;
+    let heatCls = "";
+    if (hrs >= 8) heatCls = "heat-5";
+    else if (hrs >= 6) heatCls = "heat-4";
+    else if (hrs >= 4) heatCls = "heat-3";
+    else if (hrs >= 2) heatCls = "heat-2";
+    else if (hrs > 0) heatCls = "heat-1";
+
+    const selCls = dStr === selectedDate ? "selected" : "";
+    cells += `
+      <div class="cal-cell ${heatCls} ${selCls}" onclick="jumpToDate('${dStr}')">
+        <span>${d}</span>
+        ${hrs > 0 ? `<span class="cal-hrs">${hrs.toFixed(1)}h</span>` : ""}
+      </div>
+    `;
+  }
+  grid.innerHTML = heads + cells;
+}
+
+function shiftCalMonth(delta) {
+  calMonth += delta;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderHeatmapCalendar();
+}
+
+function renderWeeklyChart() {
+  const base = new Date(selectedDate);
+  const dayOfWeek = base.getDay();
+  const diffMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const mon = new Date(base);
+  mon.setDate(base.getDate() + diffMon);
+
+  const dayNames = ["월", "화", "수", "목", "금", "토", "일"];
+  let totalWeekStudy = 0;
+  const stats = [];
+
+  for (let i = 0; i < 7; i++) {
+    const cur = new Date(mon);
+    cur.setDate(mon.getDate() + i);
+    const dStr = cur.toISOString().slice(0, 10);
+    const rec = userData.days[dStr];
+    let sMin = 0, schMin = 0;
+    if (rec) {
+      rec.schedules.forEach(item => {
+        if (item.track === "actual") {
+          const dur = Math.max(0, timeToMins(item.end) - timeToMins(item.start));
+          if (item.category === "school") schMin += dur;
+          else sMin += dur;
+        }
+      });
+    }
+    totalWeekStudy += sMin;
+    stats.push({ name: dayNames[i], dStr, sMin, schMin });
+  }
+
+  document.getElementById("weeklyTotalBadge").textContent = `주간 순공 ${formatMinsKor(totalWeekStudy)}`;
+  const maxMins = Math.max(240, ...stats.map(x => x.sMin + x.schMin));
+
+  document.getElementById("weeklyBarChart").innerHTML = stats.map(st => {
+    const sPct = Math.round((st.sMin / maxMins) * 115);
+    const schPct = Math.round((st.schMin / maxMins) * 115);
+    return `
+      <div class="week-bar-col" onclick="jumpToDate('${st.dStr}')" style="cursor:pointer;">
+        <div class="week-val-lbl">${st.sMin > 0 ? (st.sMin / 60).toFixed(1) + "h" : ""}</div>
+        <div class="week-bar-stack" style="height:${Math.max(6, sPct + schPct)}px;">
+          <div class="bar-study" style="height:${sPct}px;"></div>
+          <div class="bar-school" style="height:${schPct}px;"></div>
+        </div>
+        <div class="week-day-lbl">${st.name}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderReflection() {
+  const day = getDayData(selectedDate);
+  document.getElementById("dailyMemoTextarea").value = day.memo || "";
+  document.querySelectorAll("#dailyStarRow .star-btn").forEach((el, idx) => {
+    el.classList.toggle("active", idx < (day.rating || 0));
+  });
+
+  // 과목별 실제 공부 합계 배지
+  const subMins = {};
+  day.schedules.forEach(s => {
+    if (s.track === "actual" && s.category === "study") {
+      subMins[s.subjectId] = (subMins[s.subjectId] || 0) + Math.max(0, timeToMins(s.end) - timeToMins(s.start));
+    }
+  });
+  const pills = Object.entries(subMins).map(([subId, mins]) => {
+    const sub = userData.subjects.find(x => x.id === subId) || userData.subjects[0];
+    return `<span style="font-size:0.75rem;font-weight:700;padding:3px 9px;border-radius:999px;background:${sub.color};color:#fff;">${escapeHtml(sub.name)} ${formatMinsKor(mins)}</span>`;
+  }).join("");
+  document.getElementById("subjectSummaryPills").innerHTML = pills || `<span style="font-size:0.76rem;color:var(--text-muted);">기록된 과목별 공부 시간이 없습니다.</span>`;
+}
+
+function setDayRating(score) {
+  const day = getDayData(selectedDate);
+  day.rating = score;
+  saveUserData();
+  renderReflection();
+}
+
+function saveDayMemo(val) {
+  const day = getDayData(selectedDate);
+  day.memo = val;
+  saveUserData();
+}
+
+/* ============================================================================
+   9. 날짜 이동, D-Day, 백업/복원 및 유틸리티
+   ============================================================================ */
+function shiftDate(delta) {
+  const d = new Date(selectedDate);
+  d.setDate(d.getDate() + delta);
+  selectedDate = d.toISOString().slice(0, 10);
+  calYear = d.getFullYear();
+  calMonth = d.getMonth();
+  refreshAllViews();
+}
+
+function jumpToDate(dateStr) {
+  if (!dateStr) return;
+  selectedDate = dateStr;
+  const d = new Date(dateStr);
+  calYear = d.getFullYear();
+  calMonth = d.getMonth();
+  refreshAllViews();
+}
+
+function goToday() {
+  jumpToDate(new Date().toISOString().slice(0, 10));
+}
+
+function openDdayModal() {
+  document.getElementById("ddayTitleInput").value = userData.dday?.title || "";
+  document.getElementById("ddayDateInput").value = userData.dday?.date || "";
+  openModal("ddayModal");
+}
+
+function saveDday() {
+  userData.dday = {
+    title: document.getElementById("ddayTitleInput").value.trim() || "목표일",
+    date: document.getElementById("ddayDateInput").value
+  };
+  saveUserData();
+  renderDdayBadge();
+  closeModal("ddayModal");
+}
+
+function renderDdayBadge() {
+  const badge = document.getElementById("ddayBadge");
+  if (!userData.dday || !userData.dday.date) {
+    badge.textContent = "D-Day 설정";
+    return;
+  }
+  const diff = Math.ceil((new Date(userData.dday.date) - new Date(new Date().toISOString().slice(0, 10))) / 86400000);
+  const label = diff === 0 ? "D-Day" : (diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`);
+  badge.textContent = `${userData.dday.title} (${label})`;
+}
+
+function exportBackupJson() {
+  const blob = new Blob([JSON.stringify(userData, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `momentum_planner_${currentUser}_${selectedDate}.json`;
+  a.click();
+}
+
+function importBackupJson(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (parsed && parsed.days) {
+        userData = parsed;
+        saveUserData();
+        applyConceptColor(userData.conceptColor || "#4f46e5", false);
+        applyWidgetLayout();
+        renderPlacedStickers();
+        refreshAllViews();
+        closeModal("backupModal");
+        showToast("백업 데이터가 성공적으로 복원되었습니다!");
+      }
+    } catch {
+      showToast("유효하지 않은 JSON 파일입니다.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+function timeToMins(t) {
+  if (!t) return 0;
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
+function minsToTime(m) {
+  const clamped = Math.max(0, Math.min(1439, m));
+  return `${String(Math.floor(clamped / 60)).padStart(2, "0")}:${String(clamped % 60).padStart(2, "0")}`;
+}
+function formatMinsKor(m) {
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  return h > 0 ? `${h}시간 ${rem}분` : `${rem}분`;
+}
+function getNowTimeStr() {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+function formatKoreanDate(str) {
+  const d = new Date(str);
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+</script>
+</body>
+</html>
